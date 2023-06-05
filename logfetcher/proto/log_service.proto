@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package wowlogfetcher;
+
+service LogFetcher {
+  
+  rpc GetDungeonRanks (DRRequest) returns (DRResponse) {}
+
+  rpc GetRaidRanks (RRRequest) returns (RRResponse) {}
+
+}
+
+
+message DRRequest {
+  string dung = 1;
+  string rio_link = 2;
+}
+
+message RRRequest {
+  string raid = 1;
+  optional string dfffc = 2;
+  string rio_link = 3;
+}
+
+
+message BossResponse{
+  repeated int32 rankings = 1;
+}
+
+message DRResponse {
+  string name = 1;
+  repeated int32 rankings = 2;
+}
+
+message RRResponse {
+  string name = 1;
+  map<string, BossResponse> rankings = 2;
+}
+

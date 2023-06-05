@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "dpschecker"
+version = "0.1.0"
+description = "simple wow dps checker"
+authors = ["Potya"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+discord-py = "^2.2.0"
+pydantic = "^1.10.5"
+black = "^23.1.0"
+isort = "^5.12.0"
+mypy = "^1.0.1"
+pylint = "^2.16.2"
+httpx = "^0.23.3"
+loguru = "^0.6.0"
+grpcio = "^1.54.0"
+google = "^3.0.0"
+backoff = "^2.2.1"
+dotenv = "^0.0.5"
+python-dotenv = "^1.0.0"
+
+
+
+[build-system]
+requires = ["setuptools="]
+build-backend = "setuptools.build_meta"
