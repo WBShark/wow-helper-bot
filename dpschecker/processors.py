@@ -25,7 +25,7 @@ async def process_raid(message: discord.message.Message) -> None:
 
     try:
         rio_url: str = message.content.split()[-1]
-        dffc: RaidDiffuclty = None
+        difficulty: RaidDiffuclty = None
         raid: Raids = Raids(message.content.split()[0][1:])
     except Exception:
         logger.error(
@@ -34,25 +34,27 @@ async def process_raid(message: discord.message.Message) -> None:
         return
     signal.alarm(10)
     try:
-        loginfo: RaidLogInfo = await process_raid_request(rio_url, raid, dffc)
+        loginfo: RaidLogInfo = await process_raid_request(rio_url, raid, difficulty)
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(
+            f"Failed to process raid request from {message.author.name} with error {e}"
+        )
     signal.alarm(0)
     try:
-        msg: str = f"Logs' percentile for raid {raid.value}:{dffc.name if dffc else 'Normal'} and character {loginfo.name}\n"
+        logs_summary: str = f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'} and character {loginfo.name}\n"
         if len(loginfo.rankings):
-            rankings = ""
+            rankings: str = ""
             boss: str
             reports: BossResponse
             for boss, reports in loginfo.rankings.items():
                 rankings = rankings + boss.upper() + ": "
-                for kill in reports.rankings:
-                    rankings = rankings + str(kill) + " "
+                for single_kill in reports.rankings:
+                    rankings = rankings + str(single_kill) + " "
                 rankings += "\n"
-            msg += rankings
+            logs_summary += rankings
         else:
-            msg += f"```There is no ranked runs for {raid.value}```"
-        await message.reply(msg)
+            logs_summary += f"```There is no ranked runs for {raid.value}```"
+        await message.reply(logs_summary)
     except Exception as e:
         logger.error(
             f"Failed to send report message for raid {raid.value} and character {loginfo.name} with {e}"
@@ -73,20 +75,22 @@ async def process_dungeon(message: discord.message.Message) -> None:
     try:
         loginfo: LogInfo = await process_dungeon_request(rio_url, dungeoun)
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(
+            f"Failed to process rd request from {message.author.name} with error {e}"
+        )
     signal.alarm(0)
     try:
-        msg: str = f"Logs' percentile for dungeoun {dungeoun.value} and character {loginfo.name}\n"
+        logs_summary: str = f"Logs' percentile for dungeoun {dungeoun.value} and character {loginfo.name}\n"
         if len(loginfo.rankings):
             rankings = ""
             for single_run in loginfo.rankings:
                 rankings += str(round(float(single_run))) + " "
 
-            # await message.channel.send(msg)
-            msg = msg + "```" + pretify_message(rankings) + "```"
+            # await message.channel.send(logs_summary)
+            logs_summary = logs_summary + "```" + pretify_message(rankings) + "```"
         else:
-            msg += f"```There is no ranked runs for {dungeoun.value}```"
-        await message.reply(msg)
+            logs_summary += f"```There is no ranked runs for {dungeoun.value}```"
+        await message.reply(logs_summary)
     except Exception as e:
         logger.error(
             f"Failed to send report message for dungeoun {dungeoun.value} and character {loginfo.name} with {e}"

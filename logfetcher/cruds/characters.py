@@ -26,17 +26,17 @@ def get_character_id(rio_page: HTMLResponse) -> int:
     return int(find_character_id(rio_page.html.text))
 
 
-async def create_character(char: CharacterCreate) -> str:
-    rio_page: HTMLResponse = await render_page(char.rio_url)
+async def create_character(character: CharacterCreate) -> str:
+    rio_page: HTMLResponse = await render_page(character.rio_url)
     wlog_url: HttpUrl = await get_wlog_link(rio_page)
     wlog_info: list[str] = wlog_url.split("/")
 
-    rio_info: list[str] = str(char.rio_url).split("/")
+    rio_info: list[str] = str(character.rio_url).split("/")
     rio_id: int = get_character_id(rio_page)
 
     return Character(
-        rio_url=char.rio_url,
-        rioid=rio_id,
+        rio_url=character.rio_url,
+        rio_id=rio_id,
         wlog_url=wlog_url,
         wlog_server=wlog_info[-2],
         rio_server=rio_info[-2],

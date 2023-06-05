@@ -29,7 +29,7 @@ async def fetch_logs(
 
 
 async def get_sorted_dungeon_ratings(
-    character: Character, zone: int, difficulty: Optional[int] = None
+    character: Character, zone_id: int, difficulty: Optional[int] = None
 ) -> list[float]:
     ex: WOWLogsOAuth2Client = WOWLogsOAuth2Client(
         config.wlog_id,
@@ -37,7 +37,7 @@ async def get_sorted_dungeon_ratings(
     )
     ex.get_access_token()
     async with httpx.AsyncClient() as client:
-        query: str = build_wlog_query(character, zone, difficulty)
+        query: str = build_wlog_query(character, zone_id, difficulty)
         try:
             result: httpx.Response = fetch_logs(query, client, ex.access_token)
             logs: list[float] = process_character_ratings(result.json())
@@ -47,7 +47,7 @@ async def get_sorted_dungeon_ratings(
 
 
 async def get_sorted_raid_ratings(
-    character: Character, zone: dict, difficulty: Optional[int] = None
+    character: Character, zone_id: dict, difficulty: Optional[int] = None
 ) -> list[float]:
     ex: WOWLogsOAuth2Client = WOWLogsOAuth2Client(
         config.wlog_id,
@@ -55,14 +55,14 @@ async def get_sorted_raid_ratings(
     )
     ex.get_access_token()
     logs: dict[log_service.BossResponse] = {}
-    tg: asyncio.TaskGroup
+    task_group: asyncio.TaskGroup
     tasks: dict[asyncio.Task] = {}
     async with httpx.AsyncClient() as client:
-        async with asyncio.TaskGroup() as tg:
-            for boss in zone:
-                query: str = build_wlog_query(character, zone[boss], difficulty)
+        async with asyncio.TaskGroup() as task_group:
+            for boss in zone_id:
+                query: str = build_wlog_query(character, zone_id[boss], difficulty)
                 try:
-                    tasks[boss] = tg.create_task(
+                    tasks[boss] = task_group.create_task(
                         fetch_logs(query, client, ex.access_token)
                     )
 
@@ -75,9 +75,9 @@ async def get_sorted_raid_ratings(
     return logs
 
 
-def process_character_ratings(data: str) -> list[float]:
-    logs: WarcraftLogs = WarcraftLogs(data=data["data"])
-    results: list[float] = []
+def process_character_ratings(character_data: str) -> list[float]:
+    logs: WarcraftLogs = WarcraftLogs(data=character_data["data"])
+    logs_percintile: list[float] = []
     for single_run in logs.data.characterData.character.encounterRankings.ranks:
-        results.append(int(single_run.historicalPercent))
-    return sorted(results)
+        logs_percintile.append(int(single_run.historicalPercent))
+    return sorted(logs_percintile)

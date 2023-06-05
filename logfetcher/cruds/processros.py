@@ -4,8 +4,8 @@ from typing import Optional
 from logfetcher.models.characters import Character
 
 
-def find_character_id(text: str) -> int:
-    pattern: list[str] = re.findall('"characterId":(\S+?)}', string=text)
+def find_character_id(page_text: str) -> int:
+    pattern: list[str] = re.findall('"characterId":(\S+?)}', string=page_text)
     return pattern[0]
 
 

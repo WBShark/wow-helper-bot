@@ -11,11 +11,11 @@ from logfetcher.servicer import LogFetcherServicer
 
 
 async def serve() -> None:
-    server: grpc.aio.Server = grpc.aio.server()
-    log_service_grpc.add_LogFetcherServicer_to_server(LogFetcherServicer(), server)
-    server.add_insecure_port(":".join("[::]", config.grpc_port))
-    await server.start()
-    await server.wait_for_termination()
+    grpc_server: grpc.aio.Server = grpc.aio.server()
+    log_service_grpc.add_LogFetcherServicer_to_server(LogFetcherServicer(), grpc_server)
+    grpc_server.add_insecure_port(":".join("[::]", config.grpc_port))
+    await grpc_server.start()
+    await grpc_server.wait_for_termination()
 
 
 if __name__ == "__main__":

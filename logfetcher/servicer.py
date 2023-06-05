@@ -24,8 +24,7 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
             logs.get_sorted_dungeon_ratings(character, WLogsMapping[request.dung])
         )
         await dung_task
-        rankings = dung_task.result()
-        return log_service.DRResponse(name=character.name, rankings=rankings)
+        return log_service.DRResponse(name=character.name, rankings=dung_task.result())
 
     async def GetRaidRanks(
         self, request: log_service.RRRequest, context
@@ -39,6 +38,4 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
             )
         )
         await raid_task
-        rankings = raid_task.result()
-        response = log_service.RRResponse(name=character.name, rankings=rankings)
-        return response
+        return log_service.RRResponse(name=character.name, rankings=raid_task.result())

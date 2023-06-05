@@ -2,7 +2,6 @@ import discord
 from loguru import logger
 
 from dpschecker.functions import check_message
-from dpschecker.logs import LogInfo
 from dpschecker.processors import process_dungeon, process_raid
 from logfetcher.models.zones import Dungeons, Raids
 
@@ -23,15 +22,19 @@ async def on_message(message: discord.message.Message) -> None:
         logger.info(f"Skipping message {message.id} from {message.author.name}.")
         return
 
-    content = message.content.split()
+    message_content: list[str] = message.content.split()
 
-    if content[0] in ["!" + s.value for s in Dungeons]:
+    if not len(message_content):
+        logger.info(
+            f"Recieved empty message from {message.author.name}. Skipping..."
+        )
+        return
+
+    if message_content[0] in ["!" + s.value for s in Dungeons]:
         await process_dungeon(message)
-    elif content[0] in ["!" + s.value for s in Raids]:
+    elif message_content[0] in ["!" + s.value for s in Raids]:
         await process_raid(message)
     else:
         logger.info(
             f"Recieved message w/o WoW-bot request from {message.author.name}. Skipping..."
         )
-
-    return

@@ -10,7 +10,7 @@ class CharacterCreate(BaseModel):
 class Character(CharacterCreate):
     wlog_url: HttpUrl
     wid: Optional[int]
-    rioid: int
+    rio_id: int
     name: str
     rio_server: str
     wlog_server: str
