@@ -5,7 +5,7 @@ from logfetcher.models.characters import Character
 
 
 def find_character_id(text: str) -> int:
-    pattern = re.findall('"characterId":(\S+?)}', string=text)
+    pattern: list[str] = re.findall('"characterId":(\S+?)}', string=text)
     return pattern[0]
 
 

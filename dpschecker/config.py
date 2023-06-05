@@ -1,8 +1,11 @@
-from pydantic import BaseSettings, ValidationError
 from dotenv import load_dotenv
+from pydantic import BaseSettings, ValidationError
+
 
 class Config(BaseSettings):
     dc_bot_token: str = "DC_BOT_TOKEN"
+    grpc_port: str = "50051"
+
 
 load_dotenv()
 try:

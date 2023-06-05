@@ -1,7 +1,7 @@
 import discord
 from loguru import logger
 
-from dpschecker.functions import check_message, pretify_message
+from dpschecker.functions import check_message
 from dpschecker.logs import LogInfo
 from dpschecker.processors import process_dungeon, process_raid
 from logfetcher.models.zones import Dungeons, Raids
@@ -13,12 +13,12 @@ client: discord.Client = discord.Client(intents=intents)
 
 
 @client.event
-async def on_ready():
+async def on_ready() -> None:
     logger.info(f"We have logged in as {client.user}")
 
 
 @client.event
-async def on_message(message: discord.message.Message):
+async def on_message(message: discord.message.Message) -> None:
     if not check_message(message):
         logger.info(f"Skipping message {message.id} from {message.author.name}.")
         return

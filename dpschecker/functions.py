@@ -5,6 +5,7 @@ from loguru import logger
 from pydantic import HttpUrl
 
 import logfetcher.proto.log_service_pb2_grpc as log_service
+from dpschecker.config import config
 from dpschecker.logs import LogInfo, RaidLogInfo
 from logfetcher.models.zones import Dungeons, RaidDiffuclty, Raids
 from logfetcher.proto.log_service_pb2 import (
@@ -24,7 +25,7 @@ def check_message(message: discord.message.Message) -> bool:
 
 @backoff.on_exception(backoff.expo, grpc.RpcError, max_time=10)
 async def process_dungeon_request(rio_url: HttpUrl, dungeoun: Dungeons) -> LogInfo:
-    async with grpc.aio.insecure_channel("localhost:50051") as channel:
+    async with grpc.aio.insecure_channel(":".join("localhost", config.grpc_port)) as channel:
         stub: log_service.LogFetcherStub = log_service.LogFetcherStub(channel)
         try:
             logger.info(f"Processing dungeoun {dungeoun} and character {rio_url}.")
@@ -43,7 +44,7 @@ async def process_dungeon_request(rio_url: HttpUrl, dungeoun: Dungeons) -> LogIn
 async def process_raid_request(
     rio_url: HttpUrl, raid: Raids, dffc: RaidDiffuclty
 ) -> LogInfo:
-    async with grpc.aio.insecure_channel("localhost:50051") as channel:
+    async with grpc.aio.insecure_channel(":".join("localhost", config.grpc_port)) as channel:
         stub: log_service.LogFetcherStub = log_service.LogFetcherStub(channel)
         try:
             logger.info(f"Processing dungeoun {raid} and character {rio_url}.")
@@ -58,7 +59,7 @@ async def process_raid_request(
             )
 
 
-def pretify_message(rankings: str):
+def pretify_message(rankings: str) -> str:
     a = list(map(int, rankings.split()))
     a.sort(reverse=True)
     n = len(a)

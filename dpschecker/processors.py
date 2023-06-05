@@ -14,13 +14,14 @@ from logfetcher.models.zones import Dungeons, RaidDiffuclty, Raids
 from logfetcher.proto.log_service_pb2 import BossResponse
 
 
-def handler(signum, frame):
+
+def handler(signum, frame) -> None:
     logger.error("Timeout hits for requst processing!")
     raise Exception("Timeout")
 
+signal.signal(signal.SIGALRM, handler)
 
-async def process_raid(message: discord.message.Message):
-    signal.signal(signal.SIGALRM, handler)
+async def process_raid(message: discord.message.Message) -> None:
 
     try:
         rio_url: str = message.content.split()[-1]
@@ -58,8 +59,7 @@ async def process_raid(message: discord.message.Message):
         )
 
 
-async def process_dungeon(message: discord.message.Message):
-    signal.signal(signal.SIGALRM, handler)
+async def process_dungeon(message: discord.message.Message) -> None:
 
     try:
         rio_url: str = message.content.split()[-1]

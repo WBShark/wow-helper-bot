@@ -44,9 +44,9 @@ async def create_character(char: CharacterCreate) -> str:
         server_region=wlog_info[-3],
     )
 
-
+"""
 async def fetch_logs(character: Character):
-    """try:
+    try:
         with httpx.Client() as client:
             result = client.get('https://raider.io/api/characters/' + character.server_region + "/" +
                                 character.en_server + "/" + character.name,
@@ -54,5 +54,5 @@ async def fetch_logs(character: Character):
             print(result.text)
     except Exception as e:
         print(e.with_traceback())
-        print(f"Error while log fetching")"""
-    return 1
+        print(f"Error while log fetching")
+    return 1"""

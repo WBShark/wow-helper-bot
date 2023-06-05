@@ -1,11 +1,11 @@
 import json
 
-from rauth import OAuth2Service
+from rauth import OAuth2Service, OAuth2Session
 
 
 class WOWLogsOAuth2Client:
     def __init__(self, client_id, client_secret):
-        self.access_token = None
+        self.access_token: str = None
 
         self.service = OAuth2Service(
             name="warcraft_log_fetcher",
@@ -18,11 +18,11 @@ class WOWLogsOAuth2Client:
 
         self.get_access_token()
 
-    def get_access_token(self):
-        data = {
+    def get_access_token(self) -> None:
+        data: dict[str] = {
             "grant_type": "client_credentials",
         }
 
-        session = self.service.get_auth_session(data=data, decoder=json.loads)
+        session: OAuth2Session = self.service.get_auth_session(data=data, decoder=json.loads)
 
         self.access_token = session.access_token

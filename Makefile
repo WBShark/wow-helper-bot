@@ -8,10 +8,19 @@ black:
 	poetry run black ./logfetcher
 
 
-isort: black
+isort:
 	poetry run isort ./dpschecker --profile black
 	poetry run isort ./logfetcher --profile black
 
+mypy:
+	poetry run mypy ./dpschecker --no-namespace-packages
+	poetry run mypy ./logfetcher --no-namespace-packages
+
+pylint:
+	poetry run pylint ./dpschecker
+	poetry run pylint ./logfetcher
+
+precommit: isort black pylint
 
 module_run:
 	poetry run python -m dpschecker
