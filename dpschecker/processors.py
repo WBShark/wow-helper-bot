@@ -13,15 +13,15 @@ from logfetcher.models.zones import Dungeons, RaidDiffuclty, Raids
 from logfetcher.proto.log_service_pb2 import BossResponse
 
 
-
 def handler(signum, frame) -> None:
     logger.error("Timeout hits for requst processing!")
     raise Exception("Timeout")
 
+
 signal.signal(signal.SIGALRM, handler)
 
-async def process_raid(message: discord.message.Message) -> None:
 
+async def process_raid(message: discord.message.Message) -> None:
     try:
         rio_url: str = message.content.split()[-1]
         difficulty: RaidDiffuclty = None
@@ -40,7 +40,10 @@ async def process_raid(message: discord.message.Message) -> None:
         )
     signal.alarm(0)
     try:
-        logs_summary: str = f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'} and character {loginfo.name}\n"
+        logs_summary: str = (
+            f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'}",
+            f"and character {loginfo.name}\n",
+        )
         if len(loginfo.rankings):
             rankings: str = ""
             boss: str
@@ -61,7 +64,6 @@ async def process_raid(message: discord.message.Message) -> None:
 
 
 async def process_dungeon(message: discord.message.Message) -> None:
-
     try:
         rio_url: str = message.content.split()[-1]
         dungeoun: Dungeons = Dungeons(message.content.split()[0][1:])
@@ -92,5 +94,8 @@ async def process_dungeon(message: discord.message.Message) -> None:
         await message.reply(logs_summary)
     except Exception as e:
         logger.error(
-            f"Failed to send report message for dungeoun {dungeoun.value} and character {loginfo.name} with {e}"
+            (
+                f"Failed to send report message for dungeoun {dungeoun.value}",
+                f"and character {loginfo.name} with {e}",
+            )
         )

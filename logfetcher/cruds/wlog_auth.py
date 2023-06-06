@@ -23,6 +23,8 @@ class WOWLogsOAuth2Client:
             "grant_type": "client_credentials",
         }
 
-        session: OAuth2Session = self.service.get_auth_session(data=data, decoder=json.loads)
+        session: OAuth2Session = self.service.get_auth_session(
+            data=data, decoder=json.loads
+        )
 
         self.access_token = session.access_token

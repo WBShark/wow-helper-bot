@@ -25,9 +25,7 @@ async def on_message(message: discord.message.Message) -> None:
     message_content: list[str] = message.content.split()
 
     if not len(message_content):
-        logger.info(
-            f"Recieved empty message from {message.author.name}. Skipping..."
-        )
+        logger.info(f"Recieved empty message from {message.author.name}. Skipping...")
         return
 
     if message_content[0] in ["!" + s.value for s in Dungeons]:

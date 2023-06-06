@@ -15,17 +15,17 @@ def build_wlog_query(
     query: str = (
         '''
     { 
-	    characterData 
-		    {
-			    character (name: "'''
+        characterData
+            {
+			character (name: "'''
         + character.name
         + '''", serverSlug: "'''
         + character.wlog_server
         + '''", serverRegion: "'''
         + character.server_region
         + """")
-                    {
-				    encounterRankings (encounterID: """
+                {
+				encounterRankings (encounterID: """
         + str(zone_id)
     )
 
@@ -35,7 +35,7 @@ def build_wlog_query(
     query += """ ) 
 				
 			}
-	    }
+        }
     }
     """
     # print(query)

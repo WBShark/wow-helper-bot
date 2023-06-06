@@ -43,6 +43,7 @@ async def create_character(character: CharacterCreate) -> str:
         server_region=wlog_info[-3],
     )
 
+
 """
 async def fetch_logs(character: Character):
     try:
