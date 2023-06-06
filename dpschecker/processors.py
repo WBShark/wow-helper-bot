@@ -4,7 +4,6 @@ import discord
 from loguru import logger
 
 from dpschecker.functions import (
-    check_message,
     pretify_message,
     process_dungeon_request,
     process_raid_request,

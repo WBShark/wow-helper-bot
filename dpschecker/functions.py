@@ -5,7 +5,6 @@ from loguru import logger
 from pydantic import HttpUrl
 
 import logfetcher.proto.log_service_pb2_grpc as log_service
-from typing import Union, Optional
 from dpschecker.config import config
 from dpschecker.logs import LogInfo, RaidLogInfo
 from logfetcher.models.zones import Dungeons, RaidDiffuclty, Raids

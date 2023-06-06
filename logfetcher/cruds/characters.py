@@ -1,4 +1,3 @@
-import httpx
 from pydantic import HttpUrl, parse_obj_as
 from requests_html import AsyncHTMLSession, HTMLResponse
 

@@ -2,9 +2,7 @@ import json
 
 import httpx
 
-from logfetcher.cruds.wlog_auth import WOWLogsOAuth2Client
 from logfetcher.models.characters import Character
-from logfetcher.models.logs import WarcraftLogs
 from logfetcher.models.zones import Dungeons, RioMapping
 
 
