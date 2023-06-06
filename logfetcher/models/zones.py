@@ -67,9 +67,10 @@ RioMapping: dict = {
 
 
 class RaidDiffuclty(Enum):
-    Normal = 3
-    Heroic = 4
-    Mythic = 5
+    All = '0'
+    Normal = '3'
+    Heroic = '4'
+    Mythic = '5'
 
 
 class Raids(Enum):

@@ -1,11 +1,14 @@
 import logging
 import sys
+import typing
 
 from loguru import logger
 from pydantic import BaseModel
 
 
 class InterceptHandler(logging.Handler):
+
+    @typing.no_type_check
     def emit(self, record) -> None:
         # Get corresponding Loguru level if it exists.
         try:

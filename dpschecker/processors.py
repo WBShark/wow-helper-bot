@@ -2,6 +2,7 @@ import signal
 
 import discord
 from loguru import logger
+from pydantic import HttpUrl
 
 from dpschecker.functions import (
     pretify_message,
@@ -23,8 +24,8 @@ signal.signal(signal.SIGALRM, handler)
 
 async def process_raid(message: discord.message.Message) -> None:
     try:
-        rio_url: str = message.content.split()[-1]
-        difficulty: RaidDiffuclty = None
+        rio_url: HttpUrl =  HttpUrl(url=message.content.split()[-1])
+        difficulty: RaidDiffuclty = RaidDiffuclty.All
         raid: Raids = Raids(message.content.split()[0][1:])
     except Exception:
         logger.error(
@@ -40,10 +41,9 @@ async def process_raid(message: discord.message.Message) -> None:
         )
     signal.alarm(0)
     try:
-        logs_summary: str = (
-            f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'}",
-            f"and character {loginfo.name}\n",
-        )
+        logs_summary: str = f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'}" +\
+            f"and character {loginfo.name}\n"
+        
         if len(loginfo.rankings):
             rankings: str = ""
             boss: str
@@ -65,7 +65,7 @@ async def process_raid(message: discord.message.Message) -> None:
 
 async def process_dungeon(message: discord.message.Message) -> None:
     try:
-        rio_url: str = message.content.split()[-1]
+        rio_url: HttpUrl = HttpUrl(url=message.content.split()[-1])
         dungeoun: Dungeons = Dungeons(message.content.split()[0][1:])
     except Exception:
         logger.error(
