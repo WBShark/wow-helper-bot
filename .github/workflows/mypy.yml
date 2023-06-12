@@ -21,5 +21,4 @@ jobs:
         pip install mypy
     - name: Analysing the code with mypy
       run: |
-        mypy dpschecker
-        mypy logchecker
+        mypy .
