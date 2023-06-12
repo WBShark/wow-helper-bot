@@ -24,15 +24,15 @@ signal.signal(signal.SIGALRM, handler)
 
 async def process_raid(message: discord.message.Message) -> None:
     try:
-        rio_url: HttpUrl = HttpUrl(url=message.content.split()[-1])
+        rio_url: HttpUrl = HttpUrl(url=message.content.split()[-1], scheme="https")
         difficulty: RaidDiffuclty = RaidDiffuclty.All
         raid: Raids = Raids(message.content.split()[0][1:])
-    except Exception:
+    except Exception as e:
         logger.error(
-            f"Failed to parse raid and character in message from {message.author.name}"
+            f"Failed to parse raid and character in message from {message.author.name} due to {e}"
         )
         return
-    signal.alarm(10)
+    signal.alarm(1000)
     try:
         loginfo: RaidLogInfo = await process_raid_request(rio_url, raid, difficulty)
     except Exception as e:
@@ -67,14 +67,14 @@ async def process_raid(message: discord.message.Message) -> None:
 
 async def process_dungeon(message: discord.message.Message) -> None:
     try:
-        rio_url: HttpUrl = HttpUrl(url=message.content.split()[-1])
+        rio_url: HttpUrl = HttpUrl(url=message.content.split()[-1], scheme="https")
         dungeoun: Dungeons = Dungeons(message.content.split()[0][1:])
-    except Exception:
+    except Exception as e:
         logger.error(
-            f"Failed to parse dungeoun and character in message from {message.author.name}"
+            f"Failed to parse dungeoun and character in message from {message.author.name} due to {e}"
         )
         return
-    signal.alarm(10)
+    signal.alarm(1000)
     try:
         loginfo: LogInfo = await process_dungeon_request(rio_url, dungeoun)
     except Exception as e:

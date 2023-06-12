@@ -21,7 +21,7 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
     ) -> log_service.DRResponse:
         logging.info(f"Get request for {request.dung} and character {request.rio_link}")
         char: chars.CharacterCreate = chars.CharacterCreate(
-            rio_url=HttpUrl(url=request.rio_link)
+            rio_url=HttpUrl(url=request.rio_link, scheme="https")
         )
         character: chars.Character = await characters.create_character(char)
         dung_task: asyncio.Task = asyncio.create_task(
@@ -35,7 +35,7 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
     ) -> log_service.RRResponse:
         logging.info(f"Get request for {request.raid} and character {request.rio_link}")
         char: chars.CharacterCreate = chars.CharacterCreate(
-            rio_url=HttpUrl(url=request.rio_link)
+            rio_url=HttpUrl(url=request.rio_link, scheme="https")
         )
         character: chars.Character = await characters.create_character(char)
         raid_task: asyncio.Task = asyncio.create_task(

@@ -2,11 +2,16 @@ import logging
 import sys
 import typing
 
-from google.protobuf.internal.containers import MessageMap
 from loguru import logger
-from pydantic import BaseModel
+from pydantic import BaseModel as PydanticBaseModel
+from google.protobuf.json_format import MessageToDict
 
 from logfetcher.proto.log_service_pb2 import BossResponse
+
+
+class BaseModel(PydanticBaseModel):
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class InterceptHandler(logging.Handler):
@@ -35,5 +40,5 @@ class LogInfo(BaseModel):
 
 
 class RaidLogInfo(BaseModel):
-    rankings: MessageMap[str, BossResponse]
+    rankings: dict[str, BossResponse]
     name: str

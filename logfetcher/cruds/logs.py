@@ -12,7 +12,7 @@ from logfetcher.models.logs import Data, WarcraftLogs
 from logfetcher.proto import log_service_pb2 as log_service
 
 
-@backoff.on_exception(backoff.expo, httpx.HTTPError, max_time=10)
+@backoff.on_exception(backoff.expo, httpx.HTTPError, max_time=1000)
 async def fetch_logs(
     query: str, client: httpx.AsyncClient, access_token: str
 ) -> httpx.Response:
@@ -23,7 +23,6 @@ async def fetch_logs(
             "authorization": "Bearer " + access_token,
         },
         json={"query": query},
-        timeout=1,
     )
 
 
@@ -80,6 +79,6 @@ def process_character_ratings(character_data: dict) -> Optional[Iterable[int]]:
     if logs.data.characterData.character.encounterRankings.ranks:
         for single_run in logs.data.characterData.character.encounterRankings.ranks:
             logs_percintile.append(int(single_run.historicalPercent))
-        return logs_percintile.sort()
+        return sorted(logs_percintile)
     else:
         return []

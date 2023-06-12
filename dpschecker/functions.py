@@ -61,7 +61,7 @@ async def process_raid_request(
             logger.error(
                 f"Failed to process character for dungeoun {raid} and character {rio_url} with error {e}"
             )
-    return RaidLogInfo(rankings=response.rankings, name=response.name)
+    return RaidLogInfo(rankings=dict(response.rankings), name=response.name)
 
 
 @typing.no_type_check
