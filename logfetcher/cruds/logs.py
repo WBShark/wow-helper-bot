@@ -54,10 +54,10 @@ async def get_sorted_raid_ratings(
     )
     ex.get_access_token()
     logs: dict[str, log_service.BossResponse] = {}
-    task_group: asyncio.TaskGroup
+    task_group: asyncio.taskgroups.TaskGroup
     tasks: dict[str, asyncio.Task] = {}
     async with httpx.AsyncClient() as client:
-        async with asyncio.TaskGroup() as task_group:
+        async with asyncio.taskgroups.TaskGroup() as task_group:
             for boss in zone_id:
                 query: str = build_wlog_query(character, zone_id[boss], difficulty)
                 try:
