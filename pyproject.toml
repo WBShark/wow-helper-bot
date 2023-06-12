@@ -21,9 +21,6 @@ backoff = "^2.2.1"
 dotenv = "^0.0.5"
 python-dotenv = "^1.0.0"
 ruff = "^0.0.270"
-redis = "^4.5.5"
-types-redis = "^4.5.5.2"
-types-protobuf = "^4.23.0.1"
 
 
 
