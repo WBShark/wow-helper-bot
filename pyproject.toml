@@ -78,6 +78,3 @@ target-version = "py310"
 [tool.ruff.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
 max-complexity = 10
-
-[mypy]
-ignore_missing_imports="True"
