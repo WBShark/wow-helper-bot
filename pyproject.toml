@@ -42,7 +42,6 @@ unfixable = []
 
 # Exclude a variety of commonly ignored directories.
 exclude = [
-    ".toml",
     ".bzr",
     ".direnv",
     ".eggs",
@@ -81,4 +80,4 @@ target-version = "py310"
 max-complexity = 10
 
 [mypy]
-ignore_missing_imports=true
+ignore_missing_imports="True"
