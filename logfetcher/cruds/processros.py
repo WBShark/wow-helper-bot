@@ -8,6 +8,7 @@ def find_character_id(page_text: str) -> int:
     pattern: list[str] = re.findall('"characterId":(\S+?)}', string=page_text)
     return int(pattern[0])
 
+
 def build_wlog_query(
     character: Character, zone_id: int, difficulty: Optional[int] = None
 ) -> str:

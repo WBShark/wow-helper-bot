@@ -1,6 +1,7 @@
+from typing import Any, Set
+
 from logfetcher.db_redis import db
 from logfetcher.models.characters import Character
-from typing import Set, Any
 
 MYCHARS: str = "my_characters:rio:ids"
 

@@ -1,9 +1,10 @@
+import typing
+
 import backoff
 import discord
-import grpc # type: ignore
+import grpc  # type: ignore
 from loguru import logger
 from pydantic import HttpUrl
-import typing
 
 import logfetcher.proto.log_service_pb2_grpc as log_service
 from dpschecker.config import config
@@ -42,7 +43,6 @@ async def process_dungeon_request(rio_url: HttpUrl, dungeoun: Dungeons) -> LogIn
     return LogInfo(rankings=list(response.rankings), name=response.name)
 
 
-
 @backoff.on_exception(backoff.expo, grpc.RpcError, max_time=10)
 async def process_raid_request(
     rio_url: HttpUrl, raid: Raids, dffc: RaidDiffuclty
@@ -56,7 +56,7 @@ async def process_raid_request(
             response: RRResponse = await grpc_stub.GetRaidRanks(
                 RRRequest(raid=raid.value, rio_link=rio_url, dfffc=dffc.value)
             )
-            
+
         except Exception as e:
             logger.error(
                 f"Failed to process character for dungeoun {raid} and character {rio_url} with error {e}"

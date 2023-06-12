@@ -1,5 +1,5 @@
 from pydantic import HttpUrl, parse_obj_as
-from requests_html import AsyncHTMLSession, HTMLResponse # type: ignore
+from requests_html import AsyncHTMLSession, HTMLResponse  # type: ignore
 
 from logfetcher.cruds.processros import find_character_id
 from logfetcher.models.characters import Character, CharacterCreate
@@ -20,6 +20,7 @@ async def get_wlog_link(rio_page: HTMLResponse) -> HttpUrl:
         if "warcraftlog" in link:
             return parse_obj_as(HttpUrl, link)
     raise ValueError
+
 
 def get_character_id(rio_page: HTMLResponse) -> int:
     return int(find_character_id(rio_page.html.text))

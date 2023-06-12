@@ -16,11 +16,11 @@ mypy:
 	poetry run mypy ./dpschecker --no-namespace-packages
 	poetry run mypy ./logfetcher --no-namespace-packages
 
-pylint:
-	poetry run pylint ./dpschecker
-	poetry run pylint ./logfetcher
+ruff:
+	poetry run ruff ./dpschecker
+	poetry run ruff ./logfetcher
 
-precommit: isort black pylint
+precommit: isort black ruff
 
 module_run:
 	poetry run python -m dpschecker

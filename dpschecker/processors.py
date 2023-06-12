@@ -24,7 +24,7 @@ signal.signal(signal.SIGALRM, handler)
 
 async def process_raid(message: discord.message.Message) -> None:
     try:
-        rio_url: HttpUrl =  HttpUrl(url=message.content.split()[-1])
+        rio_url: HttpUrl = HttpUrl(url=message.content.split()[-1])
         difficulty: RaidDiffuclty = RaidDiffuclty.All
         raid: Raids = Raids(message.content.split()[0][1:])
     except Exception:
@@ -41,9 +41,11 @@ async def process_raid(message: discord.message.Message) -> None:
         )
     signal.alarm(0)
     try:
-        logs_summary: str = f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'}" +\
-            f"and character {loginfo.name}\n"
-        
+        logs_summary: str = (
+            f"Logs' percentile for raid {raid.value}:{difficulty.name if difficulty else 'Normal'}"
+            + f"and character {loginfo.name}\n"
+        )
+
         if len(loginfo.rankings):
             rankings: str = ""
             boss: str

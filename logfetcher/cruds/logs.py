@@ -1,5 +1,5 @@
 import asyncio
-from typing import Optional, Iterable
+from typing import Iterable, Optional
 
 import backoff
 import httpx
@@ -8,7 +8,7 @@ from logfetcher.config import config
 from logfetcher.cruds.processros import build_wlog_query
 from logfetcher.cruds.wlog_auth import WOWLogsOAuth2Client
 from logfetcher.models.characters import Character
-from logfetcher.models.logs import WarcraftLogs, Data
+from logfetcher.models.logs import Data, WarcraftLogs
 from logfetcher.proto import log_service_pb2 as log_service
 
 
@@ -82,4 +82,4 @@ def process_character_ratings(character_data: dict) -> Optional[Iterable[int]]:
             logs_percintile.append(int(single_run.historicalPercent))
         return logs_percintile.sort()
     else:
-        return[]
+        return []

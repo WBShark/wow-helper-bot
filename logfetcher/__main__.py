@@ -1,10 +1,10 @@
 import asyncio
 import logging
 
-import grpc # type: ignore
-from logfetcher.config import config
+import grpc  # type: ignore
 
 import logfetcher.proto.log_service_pb2_grpc as log_service_grpc
+from logfetcher.config import config
 from logfetcher.servicer import LogFetcherServicer
 
 ###add sleep and check

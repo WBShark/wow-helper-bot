@@ -2,12 +2,14 @@ import logging
 import sys
 import typing
 
+from google.protobuf.internal.containers import MessageMap
 from loguru import logger
 from pydantic import BaseModel
 
+from logfetcher.proto.log_service_pb2 import BossResponse
+
 
 class InterceptHandler(logging.Handler):
-
     @typing.no_type_check
     def emit(self, record) -> None:
         # Get corresponding Loguru level if it exists.
@@ -33,5 +35,5 @@ class LogInfo(BaseModel):
 
 
 class RaidLogInfo(BaseModel):
-    rankings: dict
+    rankings: MessageMap[str, BossResponse]
     name: str

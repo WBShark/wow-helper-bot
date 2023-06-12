@@ -1,6 +1,6 @@
 import json
 
-from rauth import OAuth2Service, OAuth2Session # type: ignore
+from rauth import OAuth2Service, OAuth2Session  # type: ignore
 
 
 class WOWLogsOAuth2Client:
@@ -19,9 +19,7 @@ class WOWLogsOAuth2Client:
         self.get_access_token()
 
     def get_access_token(self) -> None:
-        data: dict[str, str] = {
-            "grant_type": "client_credentials"
-        }
+        data: dict[str, str] = {"grant_type": "client_credentials"}
 
         session: OAuth2Session = self.service.get_auth_session(
             data=data, decoder=json.loads
