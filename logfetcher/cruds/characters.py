@@ -1,5 +1,5 @@
 from pydantic import HttpUrl, parse_obj_as
-from requests_html import AsyncHTMLSession, HTMLResponse
+from requests_html import AsyncHTMLSession, HTMLResponse # type: ignore
 
 from logfetcher.cruds.processros import find_character_id
 from logfetcher.models.characters import Character, CharacterCreate
@@ -14,18 +14,18 @@ async def render_page(rio_url: HttpUrl) -> HTMLResponse:
     return rio_page
 
 
-async def get_wlog_link(rio_page: HTMLResponse) -> str:
+async def get_wlog_link(rio_page: HTMLResponse) -> HttpUrl:
     link: str
     for link in rio_page.html.links:
         if "warcraftlog" in link:
             return parse_obj_as(HttpUrl, link)
-
+    raise ValueError
 
 def get_character_id(rio_page: HTMLResponse) -> int:
     return int(find_character_id(rio_page.html.text))
 
 
-async def create_character(character: CharacterCreate) -> str:
+async def create_character(character: CharacterCreate) -> Character:
     rio_page: HTMLResponse = await render_page(character.rio_url)
     wlog_url: HttpUrl = await get_wlog_link(rio_page)
     wlog_info: list[str] = wlog_url.split("/")
@@ -36,6 +36,7 @@ async def create_character(character: CharacterCreate) -> str:
     return Character(
         rio_url=character.rio_url,
         rio_id=rio_id,
+        wid=None,
         wlog_url=wlog_url,
         wlog_server=wlog_info[-2],
         rio_server=rio_info[-2],

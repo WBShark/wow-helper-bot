@@ -6,8 +6,7 @@ from logfetcher.models.characters import Character
 
 def find_character_id(page_text: str) -> int:
     pattern: list[str] = re.findall('"characterId":(\S+?)}', string=page_text)
-    return pattern[0]
-
+    return int(pattern[0])
 
 def build_wlog_query(
     character: Character, zone_id: int, difficulty: Optional[int] = None
@@ -38,5 +37,4 @@ def build_wlog_query(
         }
     }
     """
-    # print(query)
     return query

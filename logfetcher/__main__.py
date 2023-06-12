@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-import grpc
+import grpc # type: ignore
 from logfetcher.config import config
 
 import logfetcher.proto.log_service_pb2_grpc as log_service_grpc
@@ -13,7 +13,7 @@ from logfetcher.servicer import LogFetcherServicer
 async def serve() -> None:
     grpc_server: grpc.aio.Server = grpc.aio.server()
     log_service_grpc.add_LogFetcherServicer_to_server(LogFetcherServicer(), grpc_server)
-    grpc_server.add_insecure_port(":".join("[::]", config.grpc_port))
+    grpc_server.add_insecure_port(":".join(["[::]", config.grpc_port]))
     await grpc_server.start()
     await grpc_server.wait_for_termination()
 

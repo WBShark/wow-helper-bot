@@ -32,7 +32,7 @@ async def fetch_runs_ids_for_dungeon(
 
 
 async def fetch_all_runs_ids(character: Character) -> list[int]:
-    all_runs: list[int] = []
+    all_runs: list[list[int]] = []
     for dungeon in Dungeons:
         all_runs.append(
             await fetch_runs_ids_for_dungeon(character, RioMapping[dungeon.value])

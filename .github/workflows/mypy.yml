@@ -21,3 +21,4 @@ jobs:
     - name: Analysing the code with mypy
       run: |
         mypy dpschecker
+        mypy logchecker

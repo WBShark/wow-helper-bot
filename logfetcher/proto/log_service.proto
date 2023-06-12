@@ -18,7 +18,7 @@ message DRRequest {
 
 message RRRequest {
   string raid = 1;
-  optional string dfffc = 2;
+  optional int32 dfffc = 2;
   string rio_link = 3;
 }
 
