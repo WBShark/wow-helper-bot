@@ -4,7 +4,6 @@ import typing
 
 from loguru import logger
 from pydantic import BaseModel as PydanticBaseModel
-from google.protobuf.json_format import MessageToDict
 
 from logfetcher.proto.log_service_pb2 import BossResponse
 
