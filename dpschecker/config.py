@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 from pydantic import BaseSettings, ValidationError
 
 

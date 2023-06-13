@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 from pydantic import BaseSettings, ValidationError
 
 
@@ -8,7 +7,6 @@ class Config(BaseSettings):
     grpc_port: str = "50051"
 
 
-load_dotenv()
 try:
     config = Config()
 except ValidationError as e:
