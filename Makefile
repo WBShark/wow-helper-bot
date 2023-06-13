@@ -29,13 +29,13 @@ docker_bot_build:
 	docker buildx build -f bot_Dockerfile -t docker.io/whitebigshark/dc-bot:latest .
 
 docker_bot_run:
-	docker run --net=host docker.io/whitebigshark/dc-bot:latest
+	docker run --net=host --env-file .env docker.io/whitebigshark/dc-bot:latest
 
 docker_log_build:
 	docker buildx build -f log_Dockerfile -t docker.io/whitebigshark/log-bot:latest .
 
 docker_log_run:
-	docker run --net=host --memory="3g" docker.io/whitebigshark/log-bot:latest 
+	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-bot:latest 
 
 docker_push:
 	docker push docker.io/whitebigshark/dc-bot:latest

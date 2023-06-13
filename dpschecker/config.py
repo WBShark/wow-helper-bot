@@ -7,7 +7,6 @@ class Config(BaseSettings):
     grpc_port: str = "50051"
 
 
-load_dotenv()
 try:
     config = Config()
 except ValidationError as e:
