@@ -11,6 +11,7 @@ async def render_page(rio_url: HttpUrl) -> HTMLResponse:
 
     await rio_page.html.arender(timeout=5000)
 
+    RIOsession.close()
     return rio_page
 
 
