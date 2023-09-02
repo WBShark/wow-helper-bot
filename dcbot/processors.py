@@ -4,12 +4,12 @@ import discord
 from loguru import logger
 from pydantic import HttpUrl
 
-from dpschecker.functions import (
+from dcbot.functions import (
     pretify_message,
     process_dungeon_request,
     process_raid_request,
 )
-from dpschecker.logs import LogInfo, RaidLogInfo
+from dcbot.logs import LogInfo, RaidLogInfo
 from logfetcher.models.zones import Dungeons, RaidDiffuclty, Raids
 from logfetcher.proto.log_service_pb2 import BossResponse
 

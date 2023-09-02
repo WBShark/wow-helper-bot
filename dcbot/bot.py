@@ -1,8 +1,8 @@
 import discord
 from loguru import logger
 
-from dpschecker.functions import check_message
-from dpschecker.processors import process_dungeon, process_raid
+from dcbot.functions import check_message
+from dcbot.processors import process_dungeon, process_raid
 from logfetcher.models.zones import Dungeons, Raids
 
 intents: discord.Intents = discord.Intents.default()

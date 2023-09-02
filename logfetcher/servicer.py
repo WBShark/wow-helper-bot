@@ -44,4 +44,7 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
             )
         )
         await raid_task
-        return log_service.RRResponse(name=character.name, rankings=raid_task.result())
+        rankings: dict[str, log_service.BossResponse] = {}
+        for k, v in raid_task.result():
+            rankings[k] = log_service.BossResponse(rankings=v)
+        return log_service.RRResponse(name=character.name, rankings=rankings)

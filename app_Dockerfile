@@ -12,6 +12,10 @@ RUN poetry --version
 RUN groupadd -g 1000 ${USERNAME}
 RUN useradd -u 1000 -g ${USERNAME} --create-home -d /${USERNAME} ${USERNAME}
 
+RUN apt-get update && apt-get install -y \
+      chromium \
+      chromium-l10n
+
 COPY --chown=${USERNAME}:${USERNAME} . /${USERNAME}/.
 
 WORKDIR ${USERNAME}
@@ -21,8 +25,8 @@ RUN touch README.md
 COPY ./poetry.lock ./pyproject.toml ./
 RUN poetry config virtualenvs.in-project true
 RUN poetry install 
-RUN poetry add google
 
 ENV PATH="/${USERNAME}/.venv/bin:$PATH"
 
-ENTRYPOINT [ "python", "-m", "dcbot" ]
+
+ENTRYPOINT [ "uvicorn", "logapp.__main__:app", "--host", "0.0.0.0"]

@@ -1,39 +1,57 @@
-from pydantic import HttpUrl, parse_obj_as
-from requests_html import AsyncHTMLSession, HTMLResponse  # type: ignore
+import json
 
-from logfetcher.cruds.processros import find_character_id
-from logfetcher.models.characters import Character, CharacterCreate
+import httpx
+import js2py
+from bs4 import BeautifulSoup, ResultSet
+from pydantic import HttpUrl
 
+from logfetcher.models.characters import Character, CharacterCreate, CharacterRioData
 
-async def render_page(rio_url: HttpUrl) -> HTMLResponse:
-    RIOsession: AsyncHTMLSession = AsyncHTMLSession()
-    rio_page: HTMLResponse = await RIOsession.get(rio_url)
-
-    await rio_page.html.arender(timeout=5000)
-
-    await RIOsession.close()
-    return rio_page
-
-
-async def get_wlog_link(rio_page: HTMLResponse) -> HttpUrl:
-    link: str
-    for link in rio_page.html.links:
-        if "warcraftlog" in link:
-            return parse_obj_as(HttpUrl, link)
-    raise ValueError
+js_script = """
+function Immitate_Wlog_link() {
+    var e=this_is_region;
+    var t=this_is_realm;
+    var n=this_is_name;
+    var r = t.slug;
+    return -1 !== ["ru_RU", "zh_TW", "zh_CN", "ko_KR"].indexOf(t.locale) && (r = (r = t.altSlug).replace(/й/g, "и")),
+    "https://www.warcraftlogs.com/character/".concat(e, "/").concat(r, "/").concat(n)
+}
+Immitate_Wlog_link()
+"""
 
 
-def get_character_id(rio_page: HTMLResponse) -> int:
-    return int(find_character_id(rio_page.html.text))
+async def get_wlog_link(region: str, realm: str, name: str) -> HttpUrl:
+    js = js_script.replace("this_is_region", "'" + region + "'")
+    js = js.replace("this_is_realm", realm.replace("'", '"'))
+    js = js.replace("this_is_name", "'" + name + "'")
+    return js2py.eval_js(js)
+
+
+async def get_rio_character_data(rio_url: HttpUrl) -> str:
+    async with httpx.AsyncClient() as client:
+        rio_page: httpx.Response = await client.get(rio_url)
+    link: ResultSet
+    soup = BeautifulSoup(rio_page.text, "html.parser")
+    for link in soup.find_all("script"):
+        if link.string and "window.__RIO_INITIAL_DATA" in link.string:
+            return json.loads(
+                link.string[link.string.find("{") : link.string.find(";")]
+            )
 
 
 async def create_character(character: CharacterCreate) -> Character:
-    rio_page: HTMLResponse = await render_page(character.rio_url)
-    wlog_url: HttpUrl = await get_wlog_link(rio_page)
+    character_json_data: CharacterRioData = CharacterRioData.parse_obj(
+        await get_rio_character_data(character.rio_url)
+    )
+    wlog_url: HttpUrl = await get_wlog_link(
+        character_json_data.characterDetails.character.region["slug"],
+        str(dict(character_json_data.characterDetails.character.realm)),
+        character_json_data.characterDetails.character.name,
+    )
     wlog_info: list[str] = wlog_url.split("/")
 
     rio_info: list[str] = str(character.rio_url).split("/")
-    rio_id: int = get_character_id(rio_page)
+    rio_id: int = int(character_json_data.characterDetails.character.id)
 
     return Character(
         rio_url=character.rio_url,

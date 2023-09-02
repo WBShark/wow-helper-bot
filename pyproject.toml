@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "dpschecker"
+name = "wow-wathcer"
 version = "0.1.0"
-description = "simple wow dps checker"
+description = "WoW watcher for guilds/character/logs"
 authors = ["Potya"]
 readme = "README.md"
 
@@ -25,6 +25,12 @@ types-redis = "^4.5.5.2"
 grpcio-tools = "^1.54.2"
 requests-html = "^0.10.0"
 rauth = "^0.7.3"
+litestar = {extras = ["standard"], version = "^2.0.0b4"}
+uvicorn = "^0.23.1"
+selenium = "^4.10.0"
+urllib3 = "^2.0.4"
+beautifulsoup4 = "^4.12.2"
+js2py = "^0.74"
 
 
 

@@ -1,8 +1,8 @@
 import logging
 
-from dpschecker.bot import client
-from dpschecker.config import config
-from dpschecker.logs import InterceptHandler
+from dcbot.bot import client
+from dcbot.config import config
+from dcbot.logs import InterceptHandler
 
 ### add retries, timeouts, circuit brekaer
 

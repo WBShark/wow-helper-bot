@@ -4,42 +4,55 @@ proto_make:
 	
 
 black:
-	poetry run black ./dpschecker
+	poetry run black ./dcbot
 	poetry run black ./logfetcher
+	poetry run black ./logapp
 
 
 isort:
-	poetry run isort ./dpschecker --profile black
+	poetry run isort ./dcbot --profile black
 	poetry run isort ./logfetcher --profile black
+	poetry run isort ./logapp --profile black
 
 mypy:
-	poetry run mypy ./dpschecker --no-namespace-packages
+	poetry run mypy ./dcbot --no-namespace-packages
 	poetry run mypy ./logfetcher --no-namespace-packages
+	poetry run mypy ./logapp --no-namespace-packages
 
 ruff:
-	poetry run ruff ./dpschecker
+	poetry run ruff ./dcbot
 	poetry run ruff ./logfetcher
 
 precommit: isort black ruff
 
 module_run:
-	poetry run python -m dpschecker
+	poetry run python -m dcbot
+
+app_run:
+	uvicorn logapp.app:app --reload --access-log
 
 docker_bot_build:
-	docker buildx build -f bot_Dockerfile -t docker.io/whitebigshark/dc-bot:latest .
+	docker buildx build -f bot_Dockerfile -t docker.io/whitebigshark/dcbot:latest .
 
 docker_bot_run:
-	docker run --net=host --env-file .env docker.io/whitebigshark/dc-bot:latest
+	docker run --net=host --env-file .env docker.io/whitebigshark/dcbot:latest
 
 docker_log_build:
 	docker buildx build -f log_Dockerfile -t docker.io/whitebigshark/log-bot:latest .
 
 docker_log_run:
-	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-bot:latest 
+	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-bot:latest
+
+docker_app_build:
+	docker buildx build -f app_Dockerfile -t docker.io/whitebigshark/log-app:latest .
+
+docker_app_run:
+	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-app:latest 
 
 docker_push:
-	docker push docker.io/whitebigshark/dc-bot:latest
+	docker push docker.io/whitebigshark/dcbot:latest
 	docker push docker.io/whitebigshark/log-bot:latest
+	docker push docker.io/whitebigshark/log-app:latest
 
 k8s_deploy:
 	envsubst < charts/values.yaml | microk8s helm upgrade --install bot ./charts -f -

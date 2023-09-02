@@ -21,7 +21,7 @@ jobs:
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
     - name: Build the Docker image
-      run: docker build -f log_Dockerfile -t docker.io/whitebigshark/log-bot:latest .
+      run: docker build -f log_Dockerfile -t docker.io/whitebigshark/log-server:latest .
       
     - name: Docker Push
-      run: docker push docker.io/whitebigshark/log-bot:latest
+      run: docker push docker.io/whitebigshark/log-server:latest

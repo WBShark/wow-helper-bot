@@ -15,3 +15,29 @@ class Character(CharacterCreate):
     rio_server: str
     wlog_server: str
     server_region: str
+
+
+class Realm(BaseModel):
+    id: int
+    connectedRealmId: int
+    name: str
+    altName: str
+    slug: str
+    altSlug: str
+    locale: str
+    isConnected: str
+
+
+class CharacterInfo(BaseModel):
+    id: int
+    name: str
+    realm: Realm
+    region: dict
+
+
+class CharacterDetails(BaseModel):
+    character: CharacterInfo
+
+
+class CharacterRioData(BaseModel):
+    characterDetails: CharacterDetails
