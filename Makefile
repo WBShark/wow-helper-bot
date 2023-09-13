@@ -48,7 +48,13 @@ docker_app_build:
 	docker buildx build -f app_Dockerfile -t docker.io/whitebigshark/log-app:latest .
 
 docker_app_run:
-	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-app:latest 
+	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-app:latest
+
+docker_crawler_build:
+	docker buildx build -f crawler_Dockerfile -t docker.io/whitebigshark/crawler-server:latest .
+
+docker_crawler_run:
+	docker run --net=host --env-file .env docker.io/whitebigshark/crawler-server:latest  
 
 docker_push:
 	docker push docker.io/whitebigshark/dcbot:latest

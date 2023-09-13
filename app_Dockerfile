@@ -29,4 +29,4 @@ RUN poetry install
 ENV PATH="/${USERNAME}/.venv/bin:$PATH"
 
 
-ENTRYPOINT [ "uvicorn", "logapp.__main__:app", "--host", "0.0.0.0"]
+ENTRYPOINT [ "uvicorn", "logapp.app:app", "--host", "0.0.0.0"]
