@@ -1,10 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class CharacterCreate(BaseModel):
-    rio_url: HttpUrl
+    rio_url: HttpUrl = Field(alias="profile_url")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class Character(CharacterCreate):
@@ -15,6 +18,8 @@ class Character(CharacterCreate):
     rio_server: str
     wlog_server: str
     server_region: str
+    realm_id: Optional[int]
+    realm_name: Optional[str]
 
 
 class Realm(BaseModel):

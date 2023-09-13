@@ -8,6 +8,8 @@ service LogFetcher {
 
   rpc GetRaidRanks (RRRequest) returns (RRResponse) {}
 
+  rpc AddGuildToWathcer(GuildAddRequest) returns (GuildAddResponse) {}
+
 }
 
 
@@ -37,3 +39,11 @@ message RRResponse {
   map<string, BossResponse> rankings = 2;
 }
 
+message GuildAddRequest {
+  string rio_guild_link = 1;
+  string channel_id = 2;
+}
+
+message GuildAddResponse {
+  int32 rd_guild_id = 1;
+}

@@ -1,8 +1,9 @@
 import discord
 from loguru import logger
 
+from dcbot.character_processors import process_dungeon, process_raid
 from dcbot.functions import check_message
-from dcbot.processors import process_dungeon, process_raid
+from dcbot.guild_processors import add_guild_to_watch
 from logfetcher.models.zones import Dungeons, Raids
 
 intents: discord.Intents = discord.Intents.default()
@@ -32,6 +33,10 @@ async def on_message(message: discord.message.Message) -> None:
         await process_dungeon(message)
     elif message_content[0] in ["!" + s.value for s in Raids]:
         await process_raid(message)
+    elif message_content[0] == "!ww" and message_content[1] == "add":
+        if message_content[2] == "-g":
+            await add_guild_to_watch(message)
+
     else:
         logger.info(
             f"Recieved message w/o WoW-bot request from {message.author.name}. Skipping..."

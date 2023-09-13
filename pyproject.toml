@@ -31,6 +31,9 @@ selenium = "^4.10.0"
 urllib3 = "^2.0.4"
 beautifulsoup4 = "^4.12.2"
 js2py = "^0.74"
+redis = "^5.0.0"
+matplotlib = "^3.7.2"
+starlette = "^0.31.1"
 
 
 

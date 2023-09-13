@@ -1,6 +1,5 @@
 from litestar import Litestar
 from litestar.openapi import OpenAPIConfig
-from loguru import logger
 
 from logapp.routes import character_router
 

@@ -6,7 +6,7 @@ from pydantic import HttpUrl
 import logfetcher.models.characters as chars
 import logfetcher.proto.log_service_pb2 as log_service
 import logfetcher.proto.log_service_pb2_grpc as log_service_grpc
-from logfetcher.cruds import characters, logs
+from logfetcher.cruds import characters, guilds, logs
 from logfetcher.models.zones import RaidsDict, WLogsMapping
 
 ### create task try
@@ -48,3 +48,14 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
         for k, v in raid_task.result():
             rankings[k] = log_service.BossResponse(rankings=v)
         return log_service.RRResponse(name=character.name, rankings=rankings)
+
+    async def AddGuildToWathcer(
+        self, request: log_service.GuildAddRequest, context
+    ) -> log_service.GuildAddResponse:
+        logging.info(
+            f"Get request for guild {request.rio_guild_link} for insert to redis and channel {request.channel_id}"
+        )
+        result: int = await guilds.add_guild_to_watcher(
+            HttpUrl(url=request.rio_guild_link, scheme="https"), int(request.channel_id)
+        )
+        return log_service.GuildAddResponse(rd_guild_id=result)

@@ -1,4 +1,5 @@
 import json
+import logging
 
 import httpx
 import js2py
@@ -27,9 +28,9 @@ async def get_wlog_link(region: str, realm: str, name: str) -> HttpUrl:
     return js2py.eval_js(js)
 
 
-async def get_rio_character_data(rio_url: HttpUrl) -> str:
+async def get_rio_initial_data(rio_url: HttpUrl) -> dict:
     async with httpx.AsyncClient() as client:
-        rio_page: httpx.Response = await client.get(rio_url)
+        rio_page: httpx.Response = await client.get(rio_url, timeout=1000)
     link: ResultSet
     soup = BeautifulSoup(rio_page.text, "html.parser")
     for link in soup.find_all("script"):
@@ -40,29 +41,36 @@ async def get_rio_character_data(rio_url: HttpUrl) -> str:
 
 
 async def create_character(character: CharacterCreate) -> Character:
-    character_json_data: CharacterRioData = CharacterRioData.parse_obj(
-        await get_rio_character_data(character.rio_url)
-    )
-    wlog_url: HttpUrl = await get_wlog_link(
-        character_json_data.characterDetails.character.region["slug"],
-        str(dict(character_json_data.characterDetails.character.realm)),
-        character_json_data.characterDetails.character.name,
-    )
-    wlog_info: list[str] = wlog_url.split("/")
+    logging.warning(f"Parsing character {character.rio_url}")
+    try:
+        character_json_data: CharacterRioData = CharacterRioData.parse_obj(
+            await get_rio_initial_data(character.rio_url)
+        )
+        wlog_url: HttpUrl = await get_wlog_link(
+            character_json_data.characterDetails.character.region["slug"],
+            str(dict(character_json_data.characterDetails.character.realm)),
+            character_json_data.characterDetails.character.name,
+        )
+        wlog_info: list[str] = wlog_url.split("/")
 
-    rio_info: list[str] = str(character.rio_url).split("/")
-    rio_id: int = int(character_json_data.characterDetails.character.id)
+        rio_info: list[str] = str(character.rio_url).split("/")
+        rio_id: int = int(character_json_data.characterDetails.character.id)
 
-    return Character(
-        rio_url=character.rio_url,
-        rio_id=rio_id,
-        wid=None,
-        wlog_url=wlog_url,
-        wlog_server=wlog_info[-2],
-        rio_server=rio_info[-2],
-        name=wlog_info[-1],
-        server_region=wlog_info[-3],
-    )
+        return Character(
+            rio_url=character.rio_url,
+            rio_id=rio_id,
+            wid=None,
+            wlog_url=wlog_url,
+            wlog_server=wlog_info[-2],
+            rio_server=rio_info[-2],
+            name=wlog_info[-1],
+            server_region=wlog_info[-3],
+            realm_id=character_json_data.characterDetails.character.realm.id,
+            realm_name=character_json_data.characterDetails.character.realm.name,
+        )
+    except Exception:
+        logging.error(f"Failed to process character {character.rio_url}")
+        raise ValueError
 
 
 """

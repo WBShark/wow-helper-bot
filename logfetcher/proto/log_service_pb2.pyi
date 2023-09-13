@@ -36,6 +36,22 @@ class DRResponse(_message.Message):
         self, name: _Optional[str] = ..., rankings: _Optional[_Iterable[int]] = ...
     ) -> None: ...
 
+class GuildAddRequest(_message.Message):
+    __slots__ = ["channel_id", "rio_guild_link"]
+    CHANNEL_ID_FIELD_NUMBER: _ClassVar[int]
+    RIO_GUILD_LINK_FIELD_NUMBER: _ClassVar[int]
+    channel_id: str
+    rio_guild_link: str
+    def __init__(
+        self, rio_guild_link: _Optional[str] = ..., channel_id: _Optional[str] = ...
+    ) -> None: ...
+
+class GuildAddResponse(_message.Message):
+    __slots__ = ["rd_guild_id"]
+    RD_GUILD_ID_FIELD_NUMBER: _ClassVar[int]
+    rd_guild_id: int
+    def __init__(self, rd_guild_id: _Optional[int] = ...) -> None: ...
+
 class RRRequest(_message.Message):
     __slots__ = ["dfffc", "raid", "rio_link"]
     DFFFC_FIELD_NUMBER: _ClassVar[int]

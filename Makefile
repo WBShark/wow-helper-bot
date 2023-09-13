@@ -22,6 +22,7 @@ mypy:
 ruff:
 	poetry run ruff ./dcbot
 	poetry run ruff ./logfetcher
+	poetry run ruff ./logapp
 
 precommit: isort black ruff
 
