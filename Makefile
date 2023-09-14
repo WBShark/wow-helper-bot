@@ -42,13 +42,13 @@ docker_log_build:
 	docker buildx build -f log_Dockerfile -t docker.io/whitebigshark/log-bot:latest .
 
 docker_log_run:
-	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-bot:latest
+	docker run --net=host --env-file .env docker.io/whitebigshark/log-bot:latest
 
 docker_app_build:
 	docker buildx build -f app_Dockerfile -t docker.io/whitebigshark/log-app:latest .
 
 docker_app_run:
-	docker run --net=host --memory="3g" --env-file .env docker.io/whitebigshark/log-app:latest
+	docker run --net=host --env-file .env docker.io/whitebigshark/log-app:latest
 
 docker_crawler_build:
 	docker buildx build -f crawler_Dockerfile -t docker.io/whitebigshark/crawler-server:latest .
@@ -72,3 +72,9 @@ get_pods:
 
 run_fetcher:
 	docker run -dit --network wow-net --name logs -p 8080:8080 docker.io/whitebigshark/log-fetcher:latest
+
+all_services:
+	docker run --net=host --env-file .env docker.io/whitebigshark/crawler-server:latest  &> crawler-log &
+	docker run --net=host --env-file .env docker.io/whitebigshark/app-server:latest  &> app-log &
+	docker run --net=host --env-file .env docker.io/whitebigshark/dc-bot:latest  &> bot-log &
+	docker run --net=host --env-file .env docker.io/whitebigshark/log-server:latest  &> log-log &

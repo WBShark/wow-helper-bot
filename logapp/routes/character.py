@@ -32,9 +32,12 @@ async def get_image(request: Request, character_id: int) -> File:
                 datetime.fromtimestamp(int(entry[0][0 : entry[0].find("-") - 3]))
             )
             y_axis.append(entry[1]["rio_score"])
+        request.logger.error(x_axis)
         plt.plot(x_axis, y_axis)
+        plt.gcf().autofmt_xdate()
         image_name: str = "-".join(["rio", str(character_id)]) + ".png"
-        plt.savefig("".join([FOLDER_SUFFIX, image_name]))
+        plt.savefig("".join([FOLDER_SUFFIX, image_name]),)
+        plt.cla()
         return File(
             path=Path(Path(__file__).resolve().parent, image_name).with_suffix(".png"),
             filename=image_name,
