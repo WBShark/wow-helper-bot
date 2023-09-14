@@ -25,10 +25,9 @@ class MyClient(discord.Client):
         try:
             logging.warning(f"We have logged in as {self.user}")
             for guild_id in self.message:
-                channel = await self.fetch_channel(
-                    rfuncs.get_guild_discord_channel(guild_id)
-                )
-                await channel.send(self.message[guild_id])
+                for channel_id in rfuncs.get_guild_discord_channel(guild_id):
+                    channel = await self.fetch_channel(channel_id)
+                    await channel.send(self.message[guild_id])
         except Exception as e:
             logging.error(e)
 
@@ -96,9 +95,7 @@ class WoWCrawler:
         for guild_id in all_guilds_ids:
             guild: Guild = rfuncs.get_guild(guild_id)
             logging.warning(f"Upfating guild: {guild.name}")
-            await guilds.add_guild_to_watcher(
-                guild.rio_url, rfuncs.get_guild_discord_channel(guild_id)
-            )
+            await guilds.add_guild_to_watcher(guild.rio_url, None)
         self.last_guild = time.time()
         return bool
 

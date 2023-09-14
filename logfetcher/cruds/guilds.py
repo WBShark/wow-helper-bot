@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from typing import Optional
 
 import httpx
 from pydantic import HttpUrl
@@ -12,7 +13,7 @@ from logfetcher.models.characters import Character, CharacterCreate
 from logfetcher.models.guild import Guild, GuildCreate
 
 
-async def add_guild_to_watcher(rio_link: HttpUrl, channel_id: int) -> str:
+async def add_guild_to_watcher(rio_link: HttpUrl, channel_id: Optional[int]) -> str:
     rio_initial_data: dict = await get_rio_initial_data(rio_link)
     guild_create: GuildCreate = GuildCreate(
         id=rio_initial_data["guildDetails"]["guild"]["id"],
@@ -58,6 +59,7 @@ async def add_guild_to_watcher(rio_link: HttpUrl, channel_id: int) -> str:
         **guild_create.dict(), members=guild_members, profile_url=rio_link
     )
     add_guild(guild_to_add)
-    logging.warning(f"Guild {guild_to_add.name}channel: {channel_id}")
-    set_guild_discord_channel(guild_to_add.id, channel_id)
+    if channel_id:
+        logging.warning(f"Guild {guild_to_add.name}channel: {channel_id}")
+        set_guild_discord_channel(guild_to_add.id, channel_id)
     return guild_create.id

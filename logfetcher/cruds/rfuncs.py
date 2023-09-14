@@ -34,11 +34,11 @@ def get_character(character_id: int) -> Character:
 
 
 def set_guild_discord_channel(guild_id: int, channel_id: int) -> None:
-    db.set(guild_channel_key(guild_id), str(channel_id))
+    db.sadd(guild_channel_key(guild_id), str(channel_id))
 
 
-def get_guild_discord_channel(guild_id: int) -> int:
-    return int(db.get(guild_channel_key(guild_id)))
+def get_guild_discord_channel(guild_id: int) -> set[int]:
+    return set(map(int, db.smembers(guild_channel_key(guild_id))))
 
 
 def get_guild(guild_id: int) -> Guild:
