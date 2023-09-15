@@ -56,6 +56,7 @@ class WoWCrawler:
         await self.crawl()
         await self.update_guilds()
         await self.update_character_scores()
+        await self.shout()
         return
 
     def crawl_outdated(self) -> bool:
