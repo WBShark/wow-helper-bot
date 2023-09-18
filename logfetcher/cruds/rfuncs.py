@@ -3,7 +3,7 @@ from typing import Any, Set
 
 from logfetcher.config import ONE_HOUR
 from logfetcher.cruds.processros import get_timestamp_from_redis_stream
-from logfetcher.cruds.rio_fetcher import get_character_rio_score
+from logfetcher.cruds.rio_fetcher import get_character_ilvl, get_character_rio_score
 from logfetcher.db_redis import db
 from logfetcher.models.characters import Character
 from logfetcher.models.guild import Guild
@@ -27,6 +27,10 @@ def character_key(id: int) -> str:
 
 def character_STREAM_key(id: int) -> str:
     return "character:STREAM:" + str(id)
+
+
+def character_instance_logs(id: int, zone: str) -> str:
+    return "character:INSTANCE:" + zone + ":" + str(id)
 
 
 def get_character(character_id: int) -> Character:
@@ -70,7 +74,10 @@ async def update_rio_stream(character_id: int) -> None:
     character: Character = get_character(character_id=character_id)
     db.xadd(
         character_STREAM_key(character_id),
-        {"rio_score": await get_character_rio_score(character)},
+        {
+            "rio_score": await get_character_rio_score(character),
+            "ilvl": await get_character_ilvl(character),
+        },
     )
     return character_id
 
@@ -98,3 +105,8 @@ def get_daily_increase(character_id: int) -> (Any, Any, Any, Any):
         last_rio[1]["rio_score"],
         character.rio_id,
     )
+
+
+def set_character_zone_logs(character_id: int, zone: str, logs: dict) -> bool:
+    db.set(character_instance_logs(character_id, zone), json.dumps(logs))
+    return 1

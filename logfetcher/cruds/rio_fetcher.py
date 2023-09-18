@@ -51,6 +51,21 @@ async def get_character_rio_score(character: Character) -> int:
     return int(mplus_json["mythic_plus_scores_by_season"][0]["scores"]["all"])
 
 
+async def get_character_ilvl(character: Character) -> int:
+    async with httpx.AsyncClient() as client:
+        params: dict = {
+            "region": character.server_region,
+            "realm": character.rio_server,
+            "name": character.name,
+            "fields": "gear",
+        }
+        mplus_run_info: httpx.Response = await client.get(
+            "https://raider.io/api/v1/characters/profile", params=params
+        )
+    mplus_json: dict = json.loads(mplus_run_info.text)
+    return int(mplus_json["gear"]["item_level_equipped"])
+
+
 def request_url(character_id: int, dungeon_id: int) -> str:
     return (
         "https://raider.io/api/characters/mythic-plus-runs?season=season-df-1&characterId="

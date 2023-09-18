@@ -25,7 +25,25 @@ class Dungeons(Enum):
     FH: str = "fh"
     UNDR: str = "undr"
     TVP: str = "tvp"
+    TOT: str = "tot"
+    TEB: str = "teb"
+    WCM: str = "wcm"
+    AD: str = "ad"
+    UDI: str = "udi"
+    DDI: str = "ddi"
+    BRH: str = "brh"
+    BHT: str = "bht"
 
+
+DungCurrentSeason: list[Dungeons] = [
+    Dungeons.ULD,
+    Dungeons.BH,
+    Dungeons.NLT,
+    Dungeons.HOI,
+    Dungeons.NL,
+    Dungeons.FH,
+    Dungeons.UNDR,
+]
 
 WLogsMapping: dict = {
     "hov": 61477,
@@ -106,3 +124,6 @@ RaidsDict: dict = {
     "voti": WlogsVOTIMapping,
     "atsc": WlogsATSCMapping,
 }
+
+
+RaidCurrent: Raids = Raids.ATSC

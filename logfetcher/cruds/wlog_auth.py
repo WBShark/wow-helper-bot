@@ -2,6 +2,8 @@ import json
 
 from rauth import OAuth2Service, OAuth2Session  # type: ignore
 
+from logfetcher.config import config
+
 
 class WOWLogsOAuth2Client:
     def __init__(self, client_id, client_secret):
@@ -26,3 +28,12 @@ class WOWLogsOAuth2Client:
         )
 
         self.access_token = session.access_token
+
+
+def get_token() -> str:
+    ex: WOWLogsOAuth2Client = WOWLogsOAuth2Client(
+        config.wlog_id,
+        config.wlog_secret,
+    )
+    ex.get_access_token()
+    return ex.access_token

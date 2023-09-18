@@ -13,23 +13,39 @@ async def updater() -> None:
     while True:
         logging.warning(f"Initializing crawl at {datetime.now()}")
         if crawler.crawl_outdated():
-            logging.warning(f"Crawl outadated at {datetime.now()}")
-            await crawler.crawl()
-            logging.warning(f"Crawled at {datetime.now()}")
+            try:
+                logging.warning(f"Crawl outadated at {datetime.now()}")
+                await crawler.crawl()
+                logging.warning(f"Crawled at {datetime.now()}")
+            except Exception as e:
+                logging.error(e.with_traceback())
+                logging.error("Crawl failed")
         if crawler.guild_outdated():
-            logging.warning(f"Updating guilds at {datetime.now()}")
-            await crawler.update_guilds()
-            logging.warning(f"Guilde updated at {datetime.now()}")
+            try:
+                logging.warning(f"Updating guilds at {datetime.now()}")
+                await crawler.update_guilds()
+                logging.warning(f"Guilde updated at {datetime.now()}")
+            except Exception as e:
+                logging.error(e.with_traceback())
+                logging.error("Guilds update failed")
         if crawler.rio_scores_outdated():
-            logging.warning(f"Updating rio score at {datetime.now()}")
-            await crawler.update_character_scores()
-            logging.warning(f"Updated rio score at {datetime.now()}")
+            try:
+                logging.warning(f"Updating rio score at {datetime.now()}")
+                await crawler.update_character_info()
+                logging.warning(f"Updated rio score at {datetime.now()}")
+            except Exception as e:
+                logging.error(e.with_traceback())
+                logging.error("Rio update failed")
         if crawler.shout_outdated():
-            logging.warning(f"Shouting at {datetime.now()}")
-            await crawler.shout()
-            logging.warning(f"Shoueted at {datetime.now()}")
+            try:
+                logging.warning(f"Shouting at {datetime.now()}")
+                await crawler.shout()
+                logging.warning(f"Shoueted at {datetime.now()}")
+            except Exception as e:
+                logging.error(e.with_traceback())
+                logging.error("Shout failed")
         logging.warning(f"Crawl ended {datetime.now()}")
-        time.sleep(500)
+        time.sleep(1000)
 
 
 if __name__ == "__main__":

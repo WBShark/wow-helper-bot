@@ -24,7 +24,6 @@ class Rank(BaseModel):
     medal: Optional[str]
     score: Optional[float]
     leaderboard: Optional[bool]
-    faction: bool
 
 
 class EncounterRankings(BaseModel):

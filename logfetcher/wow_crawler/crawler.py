@@ -6,10 +6,18 @@ from typing import Any
 import discord
 
 from logfetcher.config import ONE_HOUR, config
-from logfetcher.cruds import guilds, processros, rfuncs
+from logfetcher.cruds import guilds, logs, processros, rfuncs
 from logfetcher.cruds.processros import create_daily_message, criteria
 from logfetcher.cruds.rio_fetcher import crawl_character, crawl_guild
+from logfetcher.models.characters import Character
 from logfetcher.models.guild import Guild
+from logfetcher.models.zones import (
+    DungCurrentSeason,
+    RaidCurrent,
+    RaidDiffuclty,
+    RaidsDict,
+    WLogsMapping,
+)
 
 # from dcbot.bot import client
 
@@ -45,17 +53,19 @@ class WoWCrawler:
     last_rio_score: int
     last_guild: int
     last_shout: int
+    last_logs: int
 
     def __init__(self, current_time: int) -> None:
         self.last_crawl = current_time
         self.last_rio_score = current_time
+        self.last_logs = current_time
         self.last_guild = current_time
         self.last_shout = current_time
 
     async def initial_actions(self) -> None:
         await self.crawl()
         await self.update_guilds()
-        await self.update_character_scores()
+        await self.update_character_info()
         await self.shout()
         return
 
@@ -65,15 +75,18 @@ class WoWCrawler:
     def rio_scores_outdated(self) -> bool:
         return time.time() - self.last_rio_score > 4 * ONE_HOUR
 
+    def logs_outdated(self) -> bool:
+        return time.time() - self.last_logs > 10
+
     def guild_outdated(self) -> bool:
         return time.time() - self.last_guild > 4 * ONE_HOUR
 
     def shout_outdated(self) -> bool:
         return time.time() - self.last_shout > 24 * ONE_HOUR
 
-    async def update_character_scores(self) -> bool:
+    async def update_character_info(self) -> bool:
         all_characters_ids: set[int] = rfuncs.get_all_characters_ids()
-        logging.warning(f"Characters to update rio: {all_characters_ids}")
+        logging.warning(f"Characters to update info: {all_characters_ids}")
         for chunk in processros.chunks(list(all_characters_ids), 10):
             try:
                 coros = [
@@ -91,11 +104,38 @@ class WoWCrawler:
         self.last_rio_score = time.time()
         return
 
+    async def update_character_logs(self) -> bool:
+        all_characters_ids: set[int] = rfuncs.get_all_characters_ids()
+        logging.warning(f"Characters to update logs: {all_characters_ids}")
+        for character_id in all_characters_ids:
+            character: Character = rfuncs.get_character(character_id)
+            logging.warning(f"Updating logs for {character.name}")
+            tasks: dict = {}
+            async with asyncio.TaskGroup() as tg:
+                for dffclt in RaidDiffuclty:
+                    if dffclt == 0:
+                        continue
+                    tasks[RaidCurrent.value + str(dffclt.value)] = tg.create_task(
+                        logs.get_sorted_raid_ratings(
+                            character, RaidsDict[RaidCurrent.value], dffclt.value
+                        )
+                    )
+                for dung in DungCurrentSeason:
+                    tasks[dung.value] = tg.create_task(
+                        logs.get_sorted_dungeon_ratings(
+                            character, WLogsMapping[dung.value]
+                        )
+                    )
+            for key in tasks:
+                rfuncs.set_character_zone_logs(character_id, key, tasks[key].result())
+        self.last_logs = time.time()
+        return
+
     async def update_guilds(self) -> True:
         all_guilds_ids: set[int] = rfuncs.get_all_guilds_ids()
         for guild_id in all_guilds_ids:
             guild: Guild = rfuncs.get_guild(guild_id)
-            logging.warning(f"Upfating guild: {guild.name}")
+            logging.warning(f"Updating guild: {guild.name}")
             await guilds.add_guild_to_watcher(guild.rio_url, None)
         self.last_guild = time.time()
         return bool
