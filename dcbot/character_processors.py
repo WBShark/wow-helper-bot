@@ -4,6 +4,12 @@ import discord
 from loguru import logger
 from pydantic import HttpUrl
 
+import grpc  # type: ignore
+
+import logfetcher.proto.log_service_pb2_grpc as log_service
+from dcbot.config import config
+from logfetcher.proto.log_service_pb2 import CharacterAddRequest, CharacterAddResponse
+
 from dcbot.functions import (
     pretify_message,
     process_dungeon_request,
@@ -101,3 +107,23 @@ async def process_dungeon(message: discord.message.Message) -> None:
                 f"and character {loginfo.name} with {e}",
             )
         )
+
+async def add_character_to_watch(message: discord.message.Message) -> None:
+    async with grpc.aio.insecure_channel(
+        ":".join(["localhost", config.grpc_port])
+    ) as channel:
+        try:
+            grpc_stub: log_service.LogFetcherStub = log_service.LogFetcherStub(channel)
+            logger.error(message.channel.id)
+            response: CharacterAddResponse = await grpc_stub.AddCharacterToWathcer(
+                CharacterAddRequest(
+                    rio_character_link=message.content.split()[-1],
+                    channel_id=str(message.channel.id),
+                )
+            )
+            await message.reply(
+                f"Character added to watcher successfully with id: {response.rd_char_id}"
+            )
+        except Exception as e:
+            logger.error(e)
+            await message.reply("Cant now, error")

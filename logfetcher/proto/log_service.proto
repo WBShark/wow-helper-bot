@@ -10,6 +10,8 @@ service LogFetcher {
 
   rpc AddGuildToWathcer(GuildAddRequest) returns (GuildAddResponse) {}
 
+  rpc AddCharacterToWathcer(CharacterAddRequest) returns (CharacterAddResponse) {}
+
 }
 
 
@@ -47,3 +49,13 @@ message GuildAddRequest {
 message GuildAddResponse {
   int32 rd_guild_id = 1;
 }
+
+message CharacterAddRequest {
+  string rio_character_link = 1;
+  string channel_id = 2;
+}
+
+message CharacterAddResponse {
+  int32 rd_char_id = 1;
+}
+

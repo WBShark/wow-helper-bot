@@ -15,20 +15,25 @@ class LogFetcherStub(object):
             channel: A grpc.Channel.
         """
         self.GetDungeonRanks = channel.unary_unary(
-            "/wowlogfetcher.LogFetcher/GetDungeonRanks",
-            request_serializer=log__service__pb2.DRRequest.SerializeToString,
-            response_deserializer=log__service__pb2.DRResponse.FromString,
-        )
+                '/wowlogfetcher.LogFetcher/GetDungeonRanks',
+                request_serializer=log__service__pb2.DRRequest.SerializeToString,
+                response_deserializer=log__service__pb2.DRResponse.FromString,
+                )
         self.GetRaidRanks = channel.unary_unary(
-            "/wowlogfetcher.LogFetcher/GetRaidRanks",
-            request_serializer=log__service__pb2.RRRequest.SerializeToString,
-            response_deserializer=log__service__pb2.RRResponse.FromString,
-        )
+                '/wowlogfetcher.LogFetcher/GetRaidRanks',
+                request_serializer=log__service__pb2.RRRequest.SerializeToString,
+                response_deserializer=log__service__pb2.RRResponse.FromString,
+                )
         self.AddGuildToWathcer = channel.unary_unary(
-            "/wowlogfetcher.LogFetcher/AddGuildToWathcer",
-            request_serializer=log__service__pb2.GuildAddRequest.SerializeToString,
-            response_deserializer=log__service__pb2.GuildAddResponse.FromString,
-        )
+                '/wowlogfetcher.LogFetcher/AddGuildToWathcer',
+                request_serializer=log__service__pb2.GuildAddRequest.SerializeToString,
+                response_deserializer=log__service__pb2.GuildAddResponse.FromString,
+                )
+        self.AddCharacterToWathcer = channel.unary_unary(
+                '/wowlogfetcher.LogFetcher/AddCharacterToWathcer',
+                request_serializer=log__service__pb2.CharacterAddRequest.SerializeToString,
+                response_deserializer=log__service__pb2.CharacterAddResponse.FromString,
+                )
 
 
 class LogFetcherServicer(object):
@@ -37,133 +42,124 @@ class LogFetcherServicer(object):
     def GetDungeonRanks(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def GetRaidRanks(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def AddGuildToWathcer(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddCharacterToWathcer(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
 
 def add_LogFetcherServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "GetDungeonRanks": grpc.unary_unary_rpc_method_handler(
-            servicer.GetDungeonRanks,
-            request_deserializer=log__service__pb2.DRRequest.FromString,
-            response_serializer=log__service__pb2.DRResponse.SerializeToString,
-        ),
-        "GetRaidRanks": grpc.unary_unary_rpc_method_handler(
-            servicer.GetRaidRanks,
-            request_deserializer=log__service__pb2.RRRequest.FromString,
-            response_serializer=log__service__pb2.RRResponse.SerializeToString,
-        ),
-        "AddGuildToWathcer": grpc.unary_unary_rpc_method_handler(
-            servicer.AddGuildToWathcer,
-            request_deserializer=log__service__pb2.GuildAddRequest.FromString,
-            response_serializer=log__service__pb2.GuildAddResponse.SerializeToString,
-        ),
+            'GetDungeonRanks': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetDungeonRanks,
+                    request_deserializer=log__service__pb2.DRRequest.FromString,
+                    response_serializer=log__service__pb2.DRResponse.SerializeToString,
+            ),
+            'GetRaidRanks': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRaidRanks,
+                    request_deserializer=log__service__pb2.RRRequest.FromString,
+                    response_serializer=log__service__pb2.RRResponse.SerializeToString,
+            ),
+            'AddGuildToWathcer': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddGuildToWathcer,
+                    request_deserializer=log__service__pb2.GuildAddRequest.FromString,
+                    response_serializer=log__service__pb2.GuildAddResponse.SerializeToString,
+            ),
+            'AddCharacterToWathcer': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddCharacterToWathcer,
+                    request_deserializer=log__service__pb2.CharacterAddRequest.FromString,
+                    response_serializer=log__service__pb2.CharacterAddResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "wowlogfetcher.LogFetcher", rpc_method_handlers
-    )
+            'wowlogfetcher.LogFetcher', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
-# This class is part of an EXPERIMENTAL API.
+ # This class is part of an EXPERIMENTAL API.
 class LogFetcher(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def GetDungeonRanks(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def GetDungeonRanks(request,
             target,
-            "/wowlogfetcher.LogFetcher/GetDungeonRanks",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/wowlogfetcher.LogFetcher/GetDungeonRanks',
             log__service__pb2.DRRequest.SerializeToString,
             log__service__pb2.DRResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetRaidRanks(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def GetRaidRanks(request,
             target,
-            "/wowlogfetcher.LogFetcher/GetRaidRanks",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/wowlogfetcher.LogFetcher/GetRaidRanks',
             log__service__pb2.RRRequest.SerializeToString,
             log__service__pb2.RRResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def AddGuildToWathcer(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def AddGuildToWathcer(request,
             target,
-            "/wowlogfetcher.LogFetcher/AddGuildToWathcer",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/wowlogfetcher.LogFetcher/AddGuildToWathcer',
             log__service__pb2.GuildAddRequest.SerializeToString,
             log__service__pb2.GuildAddResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddCharacterToWathcer(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/wowlogfetcher.LogFetcher/AddCharacterToWathcer',
+            log__service__pb2.CharacterAddRequest.SerializeToString,
+            log__service__pb2.CharacterAddResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -62,6 +62,12 @@ def add_guild(guild: Guild) -> Set[Any]:
     return db.get(guild_key(guild.id))
 
 
+def add_character(character: Character) -> Character:
+    db.sadd(CHARACTER_IDS_TO_WATCH, character.rio_id)
+    db.set(character_key(character.rio_id), json.dumps(character.dict()))
+    return character
+
+
 def get_all_characters_ids() -> set[int]:
     return set(map(int, db.smembers(CHARACTER_IDS_TO_WATCH)))
 

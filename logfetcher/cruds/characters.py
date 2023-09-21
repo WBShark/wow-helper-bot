@@ -5,8 +5,10 @@ import httpx
 import js2py
 from bs4 import BeautifulSoup, ResultSet
 from pydantic import HttpUrl
+from typing import Optional
 
 from logfetcher.models.characters import Character, CharacterCreate, CharacterRioData
+from logfetcher.cruds.rfuncs import add_character
 
 js_script = """
 function Immitate_Wlog_link() {
@@ -71,6 +73,16 @@ async def create_character(character: CharacterCreate) -> Character:
     except Exception:
         logging.error(f"Failed to process character {character.rio_url}")
         raise ValueError
+
+
+async def add_character_to_watcher(character: Character, channel_id: Optional[int]) -> str:
+    try:
+        logging.warning(f"Adding character {character.name}")
+        add_character(character)
+    except Exception:
+        logging.error(f"Failed to add character {character.rio_url} to wathcer")
+        raise ValueError
+    return character.rio_id
 
 
 """

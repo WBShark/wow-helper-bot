@@ -59,3 +59,17 @@ class LogFetcherServicer(log_service_grpc.LogFetcherServicer):
             HttpUrl(url=request.rio_guild_link, scheme="https"), int(request.channel_id)
         )
         return log_service.GuildAddResponse(rd_guild_id=result)
+    
+    async def AddCharacterToWathcer(
+        self, request: log_service.CharacterAddRequest, context
+    ) -> log_service.CharacterAddResponse:
+        logging.info(
+            f"Get request for character {request.rio_character_link} for insert to redis and channel {request.channel_id}"
+        )
+        char: chars.CharacterCreate = chars.CharacterCreate(
+            rio_url=HttpUrl(url=request.rio_character_link, scheme="https")
+        )
+        character: chars.Character = await characters.create_character(char)
+        result: int = await characters.add_character_to_watcher(character, int(request.channel_id)
+        )
+        return log_service.CharacterAddResponse(rd_char_id=result)

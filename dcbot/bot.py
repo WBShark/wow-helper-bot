@@ -1,7 +1,7 @@
 import discord
 from loguru import logger
 
-from dcbot.character_processors import process_dungeon, process_raid
+from dcbot.character_processors import process_dungeon, process_raid, add_character_to_watch
 from dcbot.functions import check_message
 from dcbot.guild_processors import add_guild_to_watch
 from logfetcher.models.zones import Dungeons, Raids
@@ -28,7 +28,7 @@ async def on_message(message: discord.message.Message) -> None:
     if not len(message_content):
         logger.info(f"Recieved empty message from {message.author.name}. Skipping...")
         return
-
+    
     if message_content[0] in ["!" + s.value for s in Dungeons]:
         await process_dungeon(message)
     elif message_content[0] in ["!" + s.value for s in Raids]:
@@ -36,6 +36,8 @@ async def on_message(message: discord.message.Message) -> None:
     elif message_content[0] == "!ww" and message_content[1] == "add":
         if message_content[2] == "-g":
             await add_guild_to_watch(message)
+        elif message_content[2] == "-c":
+            await add_character_to_watch(message)        
 
     else:
         logger.info(

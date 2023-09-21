@@ -31,7 +31,7 @@ async def add_guild_to_watch(message: discord.message.Message) -> None:
                 )
             )
             await message.reply(
-                f"Guild added to wathcer successfully with id: {response.rd_guild_id}"
+                f"Guild added to watcher successfully with id: {response.rd_guild_id}"
             )
         except Exception as e:
             logger.error(e)
