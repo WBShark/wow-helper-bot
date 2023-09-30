@@ -18,7 +18,7 @@ async def updater() -> None:
                 await crawler.crawl()
                 logging.warning(f"Crawled at {datetime.now()}")
             except Exception as e:
-                logging.error(e.with_traceback())
+                logging.error(e)
                 logging.error("Crawl failed")
         if crawler.guild_outdated():
             try:
@@ -26,15 +26,15 @@ async def updater() -> None:
                 await crawler.update_guilds()
                 logging.warning(f"Guilde updated at {datetime.now()}")
             except Exception as e:
-                logging.error(e.with_traceback())
                 logging.error("Guilds update failed")
+                logging.error(e)
         if crawler.rio_scores_outdated():
             try:
                 logging.warning(f"Updating rio score at {datetime.now()}")
                 await crawler.update_character_info()
                 logging.warning(f"Updated rio score at {datetime.now()}")
             except Exception as e:
-                logging.error(e.with_traceback())
+                logging.error(e)
                 logging.error("Rio update failed")
         if crawler.shout_outdated():
             try:
@@ -42,7 +42,7 @@ async def updater() -> None:
                 await crawler.shout()
                 logging.warning(f"Shoueted at {datetime.now()}")
             except Exception as e:
-                logging.error(e.with_traceback())
+                logging.error(e)
                 logging.error("Shout failed")
         logging.warning(f"Crawl ended {datetime.now()}")
         time.sleep(1000)
