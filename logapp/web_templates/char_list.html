@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <div>
+            <h1>All characters</h1>
+                <ul>
+                {% for character in characters %}
+                    <li>
+                        <em> <a href="{{character.rio_id}}"> {{ character.name }} </a> </em>
+                    </li>
+                {% endfor %}
+                </ul>
+        </div>                
+    </body>
+</html>

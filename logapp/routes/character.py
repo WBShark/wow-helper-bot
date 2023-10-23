@@ -109,7 +109,6 @@ async def get_logs_raid_image(request: Request, character_id: int) -> File:
 
         num_plots: int = 0
         for i in range(len(tasks)):
-            print(list(tasks[i].result().values()))
             if any(list(tasks[i].result().values())):
                 num_plots += 1
 

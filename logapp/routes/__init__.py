@@ -8,6 +8,8 @@ from logapp.routes.character import (
     pull_raid_hist_stats,
 )
 
+from logapp.routes.char_list import list_all_trackable
+
 character_router: Router = Router(
     path="/character",
     route_handlers=[
@@ -16,5 +18,6 @@ character_router: Router = Router(
         get_info_image,
         get_logs_raid_image,
         get_logs_dungs_image,
+        list_all_trackable,
     ],
 )
